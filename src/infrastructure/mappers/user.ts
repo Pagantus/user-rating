@@ -1,9 +1,14 @@
-import { IUser, User } from '../../domain/entities/user';
+import { IUser } from '../../domain/entities/user';
 import { UserDTO } from '../dto/user';
 
 class UserMapper {
   public static fromDTO(dto: UserDTO): IUser {
-    return new User(dto.id, dto.username, dto.company.name);
+    return {
+      id: dto.id,
+      username: dto.username,
+      companyName: dto.company.name,
+      rating: 0
+    };
   }
 }
 
