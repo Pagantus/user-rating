@@ -1,8 +1,7 @@
 import { IUser } from 'domain/entities/user';
 import { Avatar, List } from 'antd';
 import React from 'react';
-import { DecreaseRatingButton } from './DecreaseRatignButton';
-import { IncreaseRatingButton } from './IncreaseRatingButton';
+import { DecreaseRatingButton, IncreaseRatingButton } from './RatingButton';
 
 type ListItem = React.FC<{ user: IUser; index: number }>;
 

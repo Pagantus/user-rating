@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Row, Tabs } from 'antd';
-import { BaseListItem, RatingListItem, UserList } from 'presentation/user/components/UserList';
+import { BaseListItem, RatingListItem, UserList } from 'presentation/user/components';
 import { useQuery } from 'presentation/hooks';
 import { useUserStore } from 'presentation/user/state';
 import { useUserServices } from 'presentation/user/context';
