@@ -37,14 +37,18 @@ const App: React.FC = () => {
   return (
     <div className='App'>
       <Row gutter={[16, 8]}>
-        <Col span={12}>
+        <Col
+          span={12}
+          key='base'>
           <UserList
             isLoading={isLoading}
             users={baseUsers}
             item={BaseListItem}
           />
         </Col>
-        <Col span={12}>
+        <Col
+          span={12}
+          key='rating'>
           <Tabs
             items={[
               {

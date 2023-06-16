@@ -1,5 +1,4 @@
 import { IUserStorage } from 'application/ports';
-import { AxiosRequestConfig } from 'axios';
 import { IRequestConfig, IUserRepository } from 'domain/repositories/user';
 import { ILogger } from 'infrastructure/logger/console';
 import { IUser, UserStatus } from '../../domain/entities/user';
@@ -45,11 +44,16 @@ class UserService {
 
   public rewardUser(user: IUser): void {
     this.logger.log(`${user.username}: Пользователь поощрен`);
-    this.storage.updateUser(user.id, { rating: 0, status: UserStatus.BASE });
+    this.deleteUser(user);
   }
 
   public banUser(user: IUser): void {
     this.logger.log(`${user.username}: Пользователь забанен`);
+    this.deleteUser(user);
+  }
+
+  public deleteUser(user: IUser): void {
+    this.logger.log(`${user.username}: Пользователь удален`);
     this.storage.updateUser(user.id, { rating: 0, status: UserStatus.BASE });
   }
 }
