@@ -5,11 +5,11 @@ interface ILogger {
 
 class Logger implements ILogger {
   public log(message: string): void {
-    console.log(`${new Date().toDateString()} [LOG]: ${message}`);
+    console.log(`${new Date().toLocaleTimeString()} [LOG]: ${message}`);
   }
 
   public error(message: string): void {
-    console.error(`${new Date().toDateString()} [ERROR]: ${message}`);
+    console.error(`${new Date().toLocaleTimeString()} [ERROR]: ${message}`);
   }
 }
 
