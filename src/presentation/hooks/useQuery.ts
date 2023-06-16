@@ -5,9 +5,10 @@ type UseQuery = {
   fetchFn: (options?: IRequestConfig) => Promise<void>;
   loadMoreFn?: (options?: IRequestConfig) => Promise<void>;
   options?: IRequestConfig;
+  canStart?: boolean;
 };
 
-const useQuery = ({ fetchFn, loadMoreFn, options }: UseQuery) => {
+const useQuery = ({ fetchFn, loadMoreFn, options, canStart }: UseQuery) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<Error | null>(null);
 
@@ -41,7 +42,9 @@ const useQuery = ({ fetchFn, loadMoreFn, options }: UseQuery) => {
   };
 
   React.useEffect(() => {
-    fetchData();
+    if (canStart) {
+      fetchData();
+    }
   }, [fetchData]);
 
   return { error, isLoading, refetch, loadMore };

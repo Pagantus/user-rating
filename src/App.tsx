@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Row, Tabs, Button, Space } from 'antd';
+import { Col, Row, Tabs, Button, Space, Result } from 'antd';
 import { BaseListItem, RatingListItem, UserList } from 'presentation/user/components';
 import { useQuery } from 'presentation/hooks';
 import { useUserStore } from 'presentation/user/state';
@@ -13,7 +13,8 @@ const App: React.FC = () => {
   const { userListService } = useUserServices();
   const { isLoading, refetch, loadMore, error } = useQuery({
     fetchFn: () => userListService.fetchUsers(),
-    loadMoreFn: () => userListService.loadMore()
+    loadMoreFn: () => userListService.loadMore(),
+    canStart: !users.length
   });
 
   const { baseUsers, positiveUsers, negativeUsers } = React.useMemo(() => {
@@ -45,6 +46,15 @@ const App: React.FC = () => {
     loadMore();
   };
 
+  if (error) {
+    return (
+      <Result
+        status='error'
+        title='Произошла ошибка при получении данных'
+      />
+    );
+  }
+
   return (
     <div className='App'>
       <Row gutter={[16, 8]}>
@@ -52,10 +62,8 @@ const App: React.FC = () => {
           span={12}
           key='base'>
           <Row>
-            <Col
-              span={24}
-              className='ant-tabs-nav'>
-              <Space>
+            <Col span={24}>
+              <Space style={{ marginBottom: 16, height: 46 }}>
                 <Button onClick={onRefreshUsers}>Обновить</Button>
                 <Button onClick={onLoadMoreUsers}>Загрузить еще</Button>
               </Space>
