@@ -1,7 +1,13 @@
 import { IUser } from '../entities/user';
 
-interface IUserRepository {
-  getUserList(page: number): Promise<IUser[]>;
+interface IRequestConfig {
+  headers?: Record<string, string>;
+  params?: Record<string, any>;
+  signal?: AbortController['signal'];
 }
 
-export type { IUserRepository };
+interface IUserRepository {
+  getUserList(page: number, config?: IRequestConfig): Promise<IUser[]>;
+}
+
+export type { IUserRepository, IRequestConfig };

@@ -1,4 +1,4 @@
-import { IUser } from '../../domain/entities/user';
+import { IUser, UserStatus } from '../../domain/entities/user';
 import { UserDTO } from '../dto/user';
 
 class UserMapper {
@@ -7,7 +7,8 @@ class UserMapper {
       id: dto.id,
       username: dto.username,
       companyName: dto.company.name,
-      rating: 0
+      rating: 0,
+      status: UserStatus.BASE
     };
   }
 }

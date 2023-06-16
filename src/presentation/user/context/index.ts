@@ -1,1 +1,1 @@
-export { ServiceContextProvider, useUserServices } from './ServiceContext';
+export { UserServicesProvider, useUserServices } from './ServiceContext';

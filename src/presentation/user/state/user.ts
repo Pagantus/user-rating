@@ -1,7 +1,7 @@
-import { UserStorage } from 'application/ports';
+import { IUserStorage } from 'application/ports';
 import { create } from 'zustand';
 
-export const useUserStore = create<UserStorage>((set) => ({
+export const useUserStore = create<IUserStorage>((set) => ({
   users: [],
   setUsers: (users) => {
     set({ users });

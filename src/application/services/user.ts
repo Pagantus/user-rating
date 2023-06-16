@@ -1,13 +1,14 @@
-import { UserStorage } from 'application/ports';
-import { IUserRepository } from 'domain/repositories/user';
+import { IUserStorage } from 'application/ports';
+import { AxiosRequestConfig } from 'axios';
+import { IRequestConfig, IUserRepository } from 'domain/repositories/user';
 import { ILogger } from 'infrastructure/logger/console';
 import { IUser, UserStatus } from '../../domain/entities/user';
 
 class UserService {
   private logger: ILogger;
-  private storage: UserStorage;
+  private storage: IUserStorage;
 
-  constructor(logger: ILogger, storage: UserStorage) {
+  constructor(logger: ILogger, storage: IUserStorage) {
     this.logger = logger;
     this.storage = storage;
   }
@@ -69,21 +70,21 @@ class DecreaseRatingError extends Error {
 
 class UserListService {
   private logger: ILogger;
-  private storage: UserStorage;
+  private storage: IUserStorage;
   private repository: IUserRepository;
   private page: number;
 
-  constructor(logger: ILogger, repository: IUserRepository, storage: UserStorage) {
+  constructor(logger: ILogger, repository: IUserRepository, storage: IUserStorage) {
     this.logger = logger;
     this.storage = storage;
     this.repository = repository;
     this.page = 1;
   }
 
-  public async getUsers(): Promise<void> {
+  public async getUsers(config?: IRequestConfig): Promise<void> {
     this.logger.log('Запрос на получение списка пользователей');
     try {
-      const users = await this.repository.getUserList(this.page);
+      const users = await this.repository.getUserList(this.page, config);
       this.storage.setUsers(users);
       this.page++;
     } catch (err) {
@@ -93,10 +94,10 @@ class UserListService {
     }
   }
 
-  public async loadMore(): Promise<void> {
+  public async loadMore(config?: IRequestConfig): Promise<void> {
     this.logger.log('Запрос на получение следующей страницы списка пользователей');
     try {
-      const users = await this.repository.getUserList(this.page);
+      const users = await this.repository.getUserList(this.page, config);
       this.storage.addUsers(users);
       this.page++;
     } catch (err) {
@@ -109,4 +110,4 @@ class UserListService {
   }
 }
 
-export { UserService, UserListService };
+export { UserService, UserListService, DecreaseRatingError, IncreaseRatingError };
