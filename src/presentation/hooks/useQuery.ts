@@ -1,32 +1,50 @@
 import React from 'react';
 import { IRequestConfig } from 'domain/repositories/user';
 
-const useQuery = (fn: (options?: IRequestConfig) => Promise<void>, options?: IRequestConfig) => {
+type UseQuery = {
+  fetchFn: (options?: IRequestConfig) => Promise<void>;
+  loadMoreFn?: (options?: IRequestConfig) => Promise<void>;
+  options?: IRequestConfig;
+};
+
+const useQuery = ({ fetchFn, loadMoreFn, options }: UseQuery) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<Error | null>(null);
 
-  React.useEffect(() => {
-    const abortController = new AbortController();
-    const fetchData = async () => {
+  const runWithAbort = React.useCallback(
+    async (fn: (options?: IRequestConfig) => Promise<void>) => {
+      const abortController = new AbortController();
       try {
         setIsLoading(true);
         await fn({ ...options, signal: abortController.signal });
-        console.log('reee');
       } catch (err) {
         const error = err as Error;
         setError(error);
       } finally {
         setIsLoading(false);
       }
-    };
+      return () => abortController.abort();
+    },
+    [options]
+  );
 
+  const fetchData = React.useCallback(() => runWithAbort(fetchFn), [runWithAbort]);
+
+  const loadMore = React.useCallback(() => {
+    if (loadMoreFn) {
+      runWithAbort(loadMoreFn);
+    }
+  }, [runWithAbort]);
+
+  const refetch = () => {
     fetchData();
-    return () => {
-      abortController.abort();
-    };
-  }, [options]);
+  };
 
-  return { error, isLoading };
+  React.useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  return { error, isLoading, refetch, loadMore };
 };
 
 export { useQuery };

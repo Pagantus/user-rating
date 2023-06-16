@@ -85,12 +85,11 @@ class UserListService {
     this.page = 1;
   }
 
-  public async getUsers(config?: IRequestConfig): Promise<void> {
+  public async fetchUsers(config?: IRequestConfig): Promise<void> {
     this.logger.log('Запрос на получение списка пользователей');
     try {
       const users = await this.repository.getUserList(this.page, config);
       this.storage.setUsers(users);
-      this.page++;
     } catch (err) {
       const error = err as Error;
       this.logger.error(`Произошла ошибка при загрузке списка пользователей: ${error.message ?? error}`);
@@ -101,10 +100,11 @@ class UserListService {
   public async loadMore(config?: IRequestConfig): Promise<void> {
     this.logger.log('Запрос на получение следующей страницы списка пользователей');
     try {
+      this.page++;
       const users = await this.repository.getUserList(this.page, config);
       this.storage.addUsers(users);
-      this.page++;
     } catch (err) {
+      this.page--;
       const error = err as Error;
       this.logger.error(
         `Произошла ошибка при получении следующей страницы списка пользователей: ${error.message ?? error}`

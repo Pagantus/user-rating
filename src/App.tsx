@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Row, Tabs } from 'antd';
+import { Col, Row, Tabs, Button, Space } from 'antd';
 import { BaseListItem, RatingListItem, UserList } from 'presentation/user/components';
 import { useQuery } from 'presentation/hooks';
 import { useUserStore } from 'presentation/user/state';
@@ -11,7 +11,10 @@ type UserData = { baseUsers: IUser[]; positiveUsers: IUser[]; negativeUsers: IUs
 const App: React.FC = () => {
   const users = useUserStore((state) => state.users);
   const { userListService } = useUserServices();
-  const { isLoading } = useQuery(() => userListService.getUsers());
+  const { isLoading, refetch, loadMore } = useQuery({
+    fetchFn: () => userListService.fetchUsers(),
+    loadMoreFn: () => userListService.loadMore()
+  });
 
   const { baseUsers, positiveUsers, negativeUsers } = React.useMemo(() => {
     return users.reduce<UserData>(
@@ -34,17 +37,35 @@ const App: React.FC = () => {
     );
   }, [users]);
 
+  const onRefreshUsers = () => {
+    refetch();
+  };
+
+  const onLoadMoreUsers = () => {
+    loadMore();
+  };
+
   return (
     <div className='App'>
       <Row gutter={[16, 8]}>
         <Col
           span={12}
           key='base'>
-          <UserList
-            isLoading={isLoading}
-            users={baseUsers}
-            item={BaseListItem}
-          />
+          <Row>
+            <Col span={24}>
+              <Space>
+                <Button onClick={onRefreshUsers}>Обновить</Button>
+                <Button onClick={onLoadMoreUsers}>Загрузить еще</Button>
+              </Space>
+            </Col>
+            <Col span={24}>
+              <UserList
+                isLoading={isLoading}
+                users={baseUsers}
+                item={BaseListItem}
+              />
+            </Col>
+          </Row>
         </Col>
         <Col
           span={12}
