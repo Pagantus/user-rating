@@ -11,7 +11,7 @@ type UserData = { baseUsers: IUser[]; positiveUsers: IUser[]; negativeUsers: IUs
 const App: React.FC = () => {
   const users = useUserStore((state) => state.users);
   const { userListService } = useUserServices();
-  const { isLoading, refetch, loadMore } = useQuery({
+  const { isLoading, refetch, loadMore, error } = useQuery({
     fetchFn: () => userListService.fetchUsers(),
     loadMoreFn: () => userListService.loadMore()
   });
@@ -52,7 +52,9 @@ const App: React.FC = () => {
           span={12}
           key='base'>
           <Row>
-            <Col span={24}>
+            <Col
+              span={24}
+              className='ant-tabs-nav'>
               <Space>
                 <Button onClick={onRefreshUsers}>Обновить</Button>
                 <Button onClick={onLoadMoreUsers}>Загрузить еще</Button>

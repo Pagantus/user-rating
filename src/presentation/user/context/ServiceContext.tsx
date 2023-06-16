@@ -24,10 +24,13 @@ const UserServicesProvider: React.FC<ServiceContextProviderProps> = ({ children 
   const storage = useUserStore();
   const repository = new ApiUserRepository(http);
 
-  const services: UserServicesType = {
-    userService: new UserService(logger, storage),
-    userListService: new UserListService(logger, repository, storage)
-  };
+  const services: UserServicesType = React.useMemo(
+    () => ({
+      userService: new UserService(logger, storage),
+      userListService: new UserListService(logger, repository, storage)
+    }),
+    []
+  );
 
   return <UserServices.Provider value={services}>{children}</UserServices.Provider>;
 };

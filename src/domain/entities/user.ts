@@ -5,7 +5,7 @@ enum UserStatus {
 }
 
 interface IUser {
-  id: number;
+  id: string;
   username: string;
   companyName: string;
   rating: number;
