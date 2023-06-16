@@ -1,4 +1,5 @@
-import { UserListService, UserService } from 'application/services/user';
+import { UserService } from 'application/services/user';
+import { UserListService } from 'application/services/userList';
 import { ApiUserRepository } from 'infrastructure/api/user';
 import { AxiosHttpService } from 'infrastructure/http/axios';
 import { Logger } from 'infrastructure/logger/console';

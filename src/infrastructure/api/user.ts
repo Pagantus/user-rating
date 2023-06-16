@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { IHttpService } from 'infrastructure/http/base';
 import { IUser } from '../../domain/entities/user';
 import { IRequestConfig, IUserRepository } from '../../domain/repositories/user';
